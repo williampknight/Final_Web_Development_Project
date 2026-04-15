@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parker Knight — Marketing &amp; Brand Strategy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* =============================================
+       GLOBAL
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F5F5F3;
+      --dark:     #111111;
+      --orange:   #FF4020;
+      --mountain: #1A6B52;
+      --purple:   #6B2ADB;
+      --blue:     #1D3FFF;
+      --red:      #FF2D55;
+      --yellow:   #FFD600;
+      --sidebar-w: 140px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       SIDEBAR
+       ============================================= */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      overflow: hidden;
+      gap: 6px;
+      padding: 8px;
+      background-color: transparent;
+    }
+
+    .nav-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 10px 14px;
+      text-decoration: none;
+      transition: flex 0.3s ease, filter 0.2s, box-shadow 0.2s;
+      min-height: 0;
+      border-radius: 10px;
+      box-shadow: 3px 4px 16px rgba(0,0,0,0.28), 0 1px 4px rgba(0,0,0,0.18);
+    }
+
+    .nav-block:hover { flex: 1.5; filter: brightness(1.08); box-shadow: 4px 6px 24px rgba(0,0,0,0.38), 0 2px 6px rgba(0,0,0,0.22); }
+
+    .nav-block .nav-num {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+      opacity: 0.75;
+    }
+
+    .nav-block .nav-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+
+    /* Block colors */
+    .nb-home     { background-color: #F5EFE0; color: var(--dark); }
+    .nb-about    { background-color: var(--orange); color: #fff; }
+    .nb-mountain { background-color: var(--mountain); color: #fff; }
+    .nb-resume   { background-color: var(--blue); color: #fff; }
+    .nb-skills   { background-color: var(--dark); color: #fff; border: none; }
+    .nb-work     { background-color: var(--purple); color: #fff; }
+    .nb-contact  { background-color: var(--red); color: #fff; }
+
+    /* =============================================
+       MAIN CONTENT AREA
+       ============================================= */
+    #main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+
+    /* Shared section wrapper — the "card" panel */
+    .page-section {
+      min-height: 100vh;
+      background-color: var(--cream);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .page-section + .page-section {
+      border-top: 1px solid rgba(0,0,0,0.07);
+    }
+
+    /* Section top labels (like "Raw Materials" / "An Unusual Design Company") */
+    .section-top-bar {
+      position: absolute;
+      top: 28px;
+      left: 36px;
+      right: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: #555;
+    }
+
+    /* =============================================
+       SECTION 00 — HOME / HERO
+       ============================================= */
+    #home {
+      background-color: var(--cream);
+    }
+
+    #home .monogram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 0 36px;
+      min-height: 0;
+    }
+
+    #home .monogram img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    #home .home-footer-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--orange);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* =============================================
+       SECTION 01 — ABOUT
+       ============================================= */
+    #about {
+      background-color: var(--cream);
+      padding: 80px 36px;
+    }
+
+    #about .section-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    #about h2 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      max-width: 680px;
+      margin-bottom: 2rem;
+    }
+
+    #about .about-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #333;
+      max-width: 620px;
+    }
+
+    #about .about-body p { margin-bottom: 1rem; }
+
+    #about .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1.5px solid rgba(0,0,0,0.12);
+    }
+
+    #about .stat-item .num {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1;
+    }
+
+    #about .stat-item .lbl {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* =============================================
+       SECTION 02 — WORK / EXPERIENCE
+       ============================================= */
+    #work {
+      background-color: #E8E3D8;
+      padding: 80px 36px;
+    }
+
+    #work .section-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 12px;
+    }
+
+    #work h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+    }
+
+    .work-entry {
+      border-top: 1.5px solid rgba(0,0,0,0.15);
+      padding: 24px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .work-entry:last-child { border-bottom: 1.5px solid rgba(0,0,0,0.15); }
+
+    .work-entry .we-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .work-entry .we-org {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .work-entry .we-bullets {
+      font-size: 0.85rem;
+      color: #333;
+      line-height: 1.6;
+      padding-left: 1rem;
+    }
+
+    .work-entry .we-bullets li { margin-bottom: 3px; }
+
+    .work-entry .we-date {
+      font-size: 0.75rem;
+      color: #888;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .we-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1.5px solid #aaa;
+      color: #666;
+      border-radius: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* =============================================
+       SECTION 03 — SKILLS
+       ============================================= */
+    #skills {
+      background-color: var(--dark);
+      padding: 80px 36px;
+      color: var(--cream);
+    }
+
+    #skills .section-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.45);
+      margin-bottom: 12px;
+    }
+
+    #skills h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      color: var(--cream);
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2px;
+    }
+
+    .skill-tile {
+      background-color: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 20px 22px;
+    }
+
+    .skill-tile .sk-category {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.4);
+      margin-bottom: 10px;
+    }
+
+    .skill-tile .sk-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+
+    /* =============================================
+       SECTION 04 — RESUME CTA
+       ============================================= */
+    #resume-cta {
+      background-color: var(--blue);
+      padding: 80px 36px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+
+    #resume-cta .cta-inner { max-width: 700px; }
+
+    #resume-cta .section-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 12px;
+    }
+
+    #resume-cta h2 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    #resume-cta p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background-color: #fff;
+      color: var(--blue);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 32px;
+      margin-right: 12px;
+      margin-bottom: 8px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .cta-btn:hover { background-color: var(--dark); color: #fff; }
+
+    .cta-btn.outline {
+      background-color: transparent;
+      border: 2px solid rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
+    .cta-btn.outline:hover { background-color: rgba(255,255,255,0.1); }
+
+    /* =============================================
+       SECTION 05 — CONTACT / FOOTER
+       ============================================= */
+    #contact {
+      background-color: var(--red);
+      padding: 80px 36px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+
+    #contact .section-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 12px;
+    }
+
+    #contact h2 {
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    #contact .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 1.5rem;
+    }
+
+    #contact .contact-links a {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,255,255,0.5);
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+
+    #contact .contact-links a:hover { border-color: #fff; }
+
+    #contact .footer-note {
+      margin-top: 3rem;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 768px) {
+      :root { --sidebar-w: 0px; }
+
+      #sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding: 8px;
+        gap: 6px;
+      }
+
+      .nav-block {
+        flex: 0 0 90px;
+        min-height: 70px;
+        justify-content: flex-end;
+        border-radius: 10px;
+      }
+
+      .nav-block:hover { flex: 0 0 90px; }
+
+      .nav-block .nav-label { font-size: 0.75rem; }
+
+      #main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       SIDEBAR NAVIGATION
+       ============================================= -->
+  <nav id="sidebar" aria-label="Main navigation">
+    <a href="#home"       class="nav-block nb-home">
+      <span class="nav-num">00</span>
+      <span class="nav-label">Parker<br>Knight</span>
+    </a>
+    <a href="#about"      class="nav-block nb-about">
+      <span class="nav-num">01</span>
+      <span class="nav-label">About</span>
+    </a>
+    <a href="#resume-cta" class="nav-block nb-resume">
+      <span class="nav-num">02</span>
+      <span class="nav-label">Résumé</span>
+    </a>
+    <a href="#skills"     class="nav-block nb-skills">
+      <span class="nav-num">03</span>
+      <span class="nav-label">Skills</span>
+    </a>
+    <a href="#work"       class="nav-block nb-work">
+      <span class="nav-num">04</span>
+      <span class="nav-label">Work</span>
+    </a>
+    <a href="#contact"    class="nav-block nb-contact">
+      <span class="nav-num">05</span>
+      <span class="nav-label">Contact</span>
+    </a>
+    <a href="#mountaineering" class="nav-block nb-mountain">
+      <span class="nav-num">06</span>
+      <span class="nav-label">Mountains</span>
+    </a>
+  </nav>
+
+  <!-- =============================================
+       MAIN CONTENT
+       ============================================= -->
+  <div id="main">
+
+    <!-- 00 — HERO -->
+    <section id="home" class="page-section">
+      <div class="section-top-bar">
+        <span>Parker Knight</span>
+        <span>Marketing &amp; Brand Strategy</span>
+      </div>
+      <div class="monogram" aria-label="PK monogram">
+        <img src="PARKER KNIGHT HEADER.png" alt="Parker Knight monogram" />
+      </div>
+      <div class="home-footer-bar">
+        <span>You are entering { About } next &nbsp;&darr;</span>
+        <span>Provo, Utah &mdash; BYU &rsquo;25</span>
+      </div>
+    </section>
+
+    <!-- 01 — ABOUT -->
+    <section id="about" class="page-section">
+      <div class="section-top-bar">
+        <span>Parker Knight</span>
+        <span>About</span>
+      </div>
+      <div style="max-width:800px; padding-top:60px;">
+        <p class="section-num">01 &mdash; About</p>
+        <h2>I build brands that demand through culture, not convention.</h2>
+        <div class="about-body">
+          <p>
+            I'm driven to companies that push marketing boundaries — brands that challenge
+            category norms and build something through craft instead of conviction. I'm
+            fascinated by how aesthetic precision, narrative, and positioning can turn
+            a commodity into culture.
+          </p>
+          <p>
+            Professionally, I work at the intersection of strategy and creativity. I've led
+            regional digital marketing initiatives across multiple islands and languages in
+            the South Pacific, generating 300,000+ impressions and contributing to a 100%
+            increase in referrals and contacts. I manage campaigns, budgets, SEO, and
+            Instagram growth.
+          </p>
+        </div>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="num">300K+</div>
+            <div class="lbl">Impressions</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">100%</div>
+            <div class="lbl">Referral increase</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">78</div>
+            <div class="lbl">Teams trained</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 — RÉSUMÉ CTA -->
+    <section id="resume-cta" class="page-section">
+      <div class="cta-inner">
+        <p class="section-num">02 &mdash; Résumé</p>
+        <h2>The Full Picture.</h2>
+        <p>
+          BS in Business from Brigham Young University, 2021–2025. My background spans
+          brand strategy, digital marketing, and content production — with hands-on experience
+          leading campaigns across the South Pacific, redesigning legacy consumer brands,
+          and producing broadcast content at BYU Broadcasting.
+        </p>
+        <p>
+          I've trained 78 teams in digital strategy, generated 300,000+ marketing impressions,
+          and led social growth that surpassed targets by 13%. Fluent in French. Experienced
+          with Adobe Creative Suite and Meta Business Suite.
+        </p>
+        <a href="resume.html" class="cta-btn" style="margin-top:1.5rem; display:inline-block;">View Full Résumé</a>
+      </div>
+    </section>
+
+    <!-- 04 — SKILLS -->
+    <section id="skills" class="page-section">
+      <div class="section-top-bar" style="color: rgba(245,239,224,0.35);">
+        <span>Parker Knight</span>
+        <span>Skills</span>
+      </div>
+      <div style="padding-top:60px; width:100%;">
+        <p class="section-num">03 &mdash; Skills</p>
+        <h2>What I Bring</h2>
+        <div class="skill-grid">
+          <div class="skill-tile"><div class="sk-category">Marketing</div><div class="sk-name">Brand Strategy</div></div>
+          <div class="skill-tile"><div class="sk-category">Marketing</div><div class="sk-name">Marketing Strategy</div></div>
+          <div class="skill-tile"><div class="sk-category">Digital</div><div class="sk-name">Digital Marketing</div></div>
+          <div class="skill-tile"><div class="sk-category">Digital</div><div class="sk-name">Social Media Growth</div></div>
+          <div class="skill-tile"><div class="sk-category">Digital</div><div class="sk-name">Paid Media — Meta</div></div>
+          <div class="skill-tile"><div class="sk-category">Creative</div><div class="sk-name">Content Production</div></div>
+          <div class="skill-tile"><div class="sk-category">Creative</div><div class="sk-name">Adobe Creative Suite</div></div>
+          <div class="skill-tile"><div class="sk-category">Language</div><div class="sk-name">French</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 — WORK -->
+    <section id="work" class="page-section">
+      <div class="section-top-bar" style="color:#444;">
+        <span>Parker Knight</span>
+        <span>Selected Work</span>
+      </div>
+      <div style="padding-top:60px; width:100%;">
+        <p class="section-num">04 &mdash; Experience</p>
+        <h2>Selected Work</h2>
+
+        <div class="work-entry">
+          <div>
+            <div class="we-badge">Part-time</div>
+            <div class="we-title">Post-Production Producer — BYU Broadcasting</div>
+            <div class="we-org">Television &amp; streaming content, Adobe Creative Suite</div>
+            <ul class="we-bullets">
+              <li>Edit long-form films and episodic content to broadcast standards</li>
+              <li>Ensure technical compliance, timing precision, and brand consistency</li>
+            </ul>
+          </div>
+          <div class="we-date">Jan 2026 – Present</div>
+        </div>
+
+        <div class="work-entry">
+          <div>
+            <div class="we-badge">Internship</div>
+            <div class="we-title">Marketing Director — The Original Creamies Ice Cream</div>
+            <div class="we-org">Brand redesign, packaging, social growth strategy</div>
+            <ul class="we-bullets">
+              <li>Led complete visual identity rebrand across 5 product lines</li>
+              <li>Surpassed Instagram growth goal by 13%; produced 120+ content pieces and 28+ reels</li>
+              <li>Executed 30+ in-field consumer interviews; market research drove entire redesign pivot</li>
+            </ul>
+          </div>
+          <div class="we-date">Jan – Apr 2026</div>
+        </div>
+
+        <div class="work-entry">
+          <div>
+            <div class="we-badge">Internship</div>
+            <div class="we-title">Regional Growth &amp; Marketing Strategist — South Pacific</div>
+            <div class="we-org">LDS Church — French Polynesia</div>
+            <ul class="we-bullets">
+              <li>Led multi-island digital marketing across languages, overseeing paid media via Meta Business Suite</li>
+              <li>Trained 78 teams in digital strategy, tools, and collaboration frameworks</li>
+              <li>300,000+ impressions; 100% increase in referrals; top region for 6 consecutive months</li>
+            </ul>
+          </div>
+          <div class="we-date">Mar – Aug 2023</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 06 — CONTACT -->
+    <section id="contact" class="page-section">
+      <div>
+        <p class="section-num">05 &mdash; Contact</p>
+        <h2>Let's build<br>something.</h2>
+        <p style="font-size:1rem; color:rgba(255,255,255,0.8); max-width:440px; line-height:1.7; margin-top:1rem;">
+          I'm looking to connect with founders and creative teams building what's next.
+        </p>
+        <div class="contact-links">
+          <a href="https://www.linkedin.com/in/williamparkerknight" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="resume.html">Résumé</a>
+        </div>
+        <p class="footer-note">William Parker Knight &mdash; BYU Portfolio Project &mdash; 2026</p>
+      </div>
+    </section>
+
+    <!-- 06 — MOUNTAINEERING -->
+    <section id="mountaineering" class="page-section" style="background-color:#0f1f1a; color:#F5EFE0; min-height:auto; padding:80px 36px;">
+      <div class="section-top-bar" style="color:rgba(245,239,224,0.3);">
+        <span>Parker Knight</span>
+        <span>Mountaineering</span>
+      </div>
+      <div style="max-width:900px; width:100%; padding-top:60px;">
+        <p class="section-num" style="color:#1A6B52;">06 &mdash; Mountaineering</p>
+        <h2 style="color:#F5EFE0; margin-bottom:0.5rem;">Where the Air Gets Thin</h2>
+        <p style="color:rgba(245,239,224,0.6); font-size:1rem; max-width:560px; margin-bottom:2.5rem;">
+          I organized an expedition to summit Kang Yatse 2 at 20,505 ft in the Indian Himalayas.
+          In the mountains, grit and disciplined execution are everything.
+        </p>
+
+        <!-- Peak grid -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:2px; margin-bottom:2.5rem;">
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#1A6B52; margin-bottom:8px;">Highest Summit</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Kang Yatse 2</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">20,505 ft &mdash; Ladakh, India</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">33.7833°N, 77.6333°E</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,239,224,0.35); margin-bottom:8px;">Utah High Point</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Kings Peak</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">13,528 ft &mdash; Uinta Mountains, UT</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">40.7762°N, 110.3729°W</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,239,224,0.35); margin-bottom:8px;">Climbed 2&times;</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Mount Timpanogos</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">11,752 ft &mdash; Wasatch Range, UT</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">40.3938°N, 111.6419°W</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,239,224,0.35); margin-bottom:8px;">Climbed 2&times;</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Lone Peak</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">11,253 ft &mdash; Wasatch Range, UT</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">40.5377°N, 111.7596°W</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,239,224,0.35); margin-bottom:8px;">Wasatch Range</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Provo Peak</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">11,068 ft &mdash; Wasatch Range, UT</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">40.3318°N, 111.5841°W</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:20px 22px;">
+            <div style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,239,224,0.35); margin-bottom:8px;">Wasatch Range</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#F5EFE0; margin-bottom:4px;">Loafer Peak</div>
+            <div style="font-size:0.82rem; color:rgba(245,239,224,0.5);">10,687 ft &mdash; Utah County, UT</div>
+            <div style="font-size:0.75rem; color:rgba(245,239,224,0.35); margin-top:6px;">39.8635°N, 111.5732°W</div>
+          </div>
+
+        </div>
+
+        <a href="scratch.html" style="display:inline-block; font-size:0.8rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#F5EFE0; border-bottom:2px solid #1A6B52; padding-bottom:2px; text-decoration:none;">Full Expedition Page &rarr;</a>
+
+        <!-- Tableau embed -->
+        <div style="margin-top:3rem;">
+          <p style="font-size:0.62rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#1A6B52; margin-bottom:0.75rem;">Mountains by the Numbers</p>
+          <h3 style="color:#F5EFE0; font-size:1.3rem; margin-bottom:0.5rem;">World's Highest Peaks</h3>
+          <p style="color:rgba(245,239,224,0.5); font-size:0.9rem; margin-bottom:1.5rem;">An interactive look at the world's major summits — elevation, location, and first-ascent data.</p>
+          <div class='tableauPlaceholder' id='viz1776286090383' style='position: relative'><noscript><a href='#'><img alt='Hpbh template ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Hi&#47;HighestPeaksbyHimal&#47;Hpbhtemplate&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='HighestPeaksbyHimal&#47;Hpbhtemplate' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Hi&#47;HighestPeaksbyHimal&#47;Hpbhtemplate&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div><script type='text/javascript'>var divElement = document.getElementById('viz1776286090383'); var vizElement = divElement.getElementsByTagName('object')[0]; if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='727px';} var scriptElement = document.createElement('script'); scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'; vizElement.parentNode.insertBefore(scriptElement, vizElement);</script>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /#main -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* Highlight the active nav block as user scrolls */
+    const sections = document.querySelectorAll('section[id]');
+    const navBlocks = document.querySelectorAll('.nav-block');
+
+    function setActive() {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - window.innerHeight / 2) {
+          current = sec.id;
+        }
+      });
+      navBlocks.forEach(nb => {
+        nb.style.outline = '';
+        if (nb.getAttribute('href') === '#' + current) {
+          nb.style.outline = '3px solid rgba(255,255,255,0.6)';
+          nb.style.outlineOffset = '-3px';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
+  </script>
+</body>
+</html>

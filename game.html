@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mountain Quiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #0f1f1a;
+      color: #F5EFE0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- Shared card wrapper ---- */
+    #app {
+      width: 100%;
+      max-width: 560px;
+      padding: 20px;
+    }
+
+    /* ---- START SCREEN ---- */
+    #start-screen {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    #start-screen .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #1A6B52;
+      margin-bottom: 16px;
+    }
+
+    #start-screen h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: #F5EFE0;
+      margin-bottom: 16px;
+    }
+
+    #start-screen p {
+      font-size: 0.95rem;
+      color: rgba(245,239,224,0.6);
+      max-width: 360px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* ---- QUESTION SCREEN ---- */
+    #question-screen { display: none; }
+
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .progress-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.45);
+    }
+
+    .score-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1A6B52;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #1A6B52;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .mountain-img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+      background-color: rgba(255,255,255,0.06);
+      margin-bottom: 20px;
+    }
+
+    .question-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,239,224,0.4);
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #F5EFE0;
+      margin-bottom: 18px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      color: #F5EFE0;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 14px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      line-height: 1.3;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.3);
+      transform: translateY(-1px);
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    .option-btn.correct {
+      background: rgba(26,107,82,0.35);
+      border-color: #1A6B52;
+      color: #7effd4;
+    }
+
+    .option-btn.wrong {
+      background: rgba(255,45,85,0.2);
+      border-color: #FF2D55;
+      color: #ff8aaa;
+    }
+
+    .option-btn.reveal {
+      background: rgba(26,107,82,0.15);
+      border-color: rgba(26,107,82,0.4);
+    }
+
+    /* ---- FEEDBACK BAR ---- */
+    .feedback-bar {
+      margin-top: 14px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+      min-height: 40px;
+    }
+
+    .feedback-bar.show { opacity: 1; }
+    .feedback-bar.correct-fb { background: rgba(26,107,82,0.25); color: #7effd4; }
+    .feedback-bar.wrong-fb   { background: rgba(255,45,85,0.2);  color: #ff8aaa; }
+
+    /* ---- END SCREEN ---- */
+    #end-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    #end-screen .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #1A6B52;
+      margin-bottom: 16px;
+    }
+
+    #end-screen h2 {
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 900;
+      color: #F5EFE0;
+      margin-bottom: 8px;
+    }
+
+    .final-score {
+      font-size: clamp(3rem, 12vw, 5.5rem);
+      font-weight: 900;
+      color: #1A6B52;
+      line-height: 1;
+      margin: 20px 0 8px;
+    }
+
+    .score-out-of {
+      font-size: 0.85rem;
+      color: rgba(245,239,224,0.45);
+      margin-bottom: 12px;
+    }
+
+    .result-message {
+      font-size: 1rem;
+      color: rgba(245,239,224,0.7);
+      max-width: 320px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* ---- BUTTONS ---- */
+    .btn-primary {
+      display: inline-block;
+      background-color: #1A6B52;
+      color: #F5EFE0;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 36px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary:hover {
+      background-color: #22885f;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== START SCREEN ===================== -->
+  <div id="start-screen">
+    <p class="eyebrow">Mountaineering Quiz</p>
+    <h1>Name That Peak</h1>
+    <p>Six mountains. Can you identify them all? 10 points for every correct answer.</p>
+    <button class="btn-primary" onclick="startGame()">Start Quiz</button>
+  </div>
+
+  <!-- ===================== QUESTION SCREEN ===================== -->
+  <div id="question-screen">
+    <div class="progress-bar-wrap">
+      <span class="progress-label" id="progress-label">Question 1 of 6</span>
+      <span class="score-label"  id="score-label">Score: 0</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <img class="mountain-img" id="mountain-img" src="" alt="Mystery mountain" />
+
+    <p class="question-label">Which mountain is this?</p>
+    <p class="question-text">Select the correct peak below.</p>
+
+    <div class="options-grid" id="options-grid"></div>
+
+    <div class="feedback-bar" id="feedback-bar"></div>
+  </div>
+
+  <!-- ===================== END SCREEN ===================== -->
+  <div id="end-screen">
+    <p class="eyebrow">Quiz Complete</p>
+    <h2 id="end-heading">Here's How You Did</h2>
+    <div class="final-score" id="final-score">0</div>
+    <p class="score-out-of">out of 60 points</p>
+    <p class="result-message" id="result-message"></p>
+    <button class="btn-primary" onclick="startGame()">Play Again</button>
+  </div>
+
+</div>
+
+<script>
+  const MOUNTAINS = [
+    { name: "Kang Yatse 2",      img: "images/kang-yatse.jpg"  },
+    { name: "Kings Peak",         img: "images/kings-peak.jpg"  },
+    { name: "Mount Timpanogos",   img: "images/timpanogos.jpg"  },
+    { name: "Lone Peak",          img: "images/lone-peak.jpg"   },
+    { name: "Provo Peak",         img: "images/provo-peak.jpg"  },
+    { name: "Loafer Peak",        img: "images/loafer-peak.jpg" },
+  ];
+
+  /* Extra names used as wrong-answer decoys */
+  const DECOYS = ["Mount Rainier", "Mount Hood", "Aconcagua", "Mount Everest", "Denali", "Mont Blanc"];
+
+  let questions = [];
+  let currentIndex = 0;
+  let score = 0;
+
+  /* ---- Utility: Fisher-Yates shuffle ---- */
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* ---- Build 4 options for a question ---- */
+  function buildOptions(correct) {
+    const pool = [
+      ...MOUNTAINS.map(m => m.name).filter(n => n !== correct),
+      ...DECOYS
+    ];
+    const wrong = shuffle(pool).slice(0, 3);
+    return shuffle([correct, ...wrong]);
+  }
+
+  /* ---- Result message based on score ---- */
+  function resultMessage(pts) {
+    if (pts === 60) return "Perfect score! You know these peaks cold.";
+    if (pts >= 50) return "Excellent — you've clearly spent time in the mountains.";
+    if (pts >= 30) return "Solid effort. A few more trips and you'll nail them all.";
+    if (pts >= 10) return "The mountains are still getting to know you. Keep exploring.";
+    return "Zero points — time to hit the trail and study up.";
+  }
+
+  /* ---- Show / hide screens ---- */
+  function show(id) {
+    ["start-screen", "question-screen", "end-screen"].forEach(s => {
+      document.getElementById(s).style.display = s === id ? "block" : "none";
+    });
+  }
+
+  /* ---- Start / restart game ---- */
+  function startGame() {
+    questions = shuffle(MOUNTAINS);
+    currentIndex = 0;
+    score = 0;
+    show("question-screen");
+    renderQuestion();
+  }
+
+  /* ---- Render current question ---- */
+  function renderQuestion() {
+    const q = questions[currentIndex];
+    const total = questions.length;
+
+    document.getElementById("progress-label").textContent =
+      `Question ${currentIndex + 1} of ${total}`;
+    document.getElementById("score-label").textContent = `Score: ${score}`;
+    document.getElementById("progress-fill").style.width =
+      `${(currentIndex / total) * 100}%`;
+
+    document.getElementById("mountain-img").src = q.img;
+    document.getElementById("mountain-img").alt = "Mystery mountain";
+
+    const feedback = document.getElementById("feedback-bar");
+    feedback.className = "feedback-bar";
+    feedback.textContent = "";
+
+    const grid = document.getElementById("options-grid");
+    grid.innerHTML = "";
+
+    const options = buildOptions(q.name);
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.textContent = opt;
+      btn.onclick = () => handleAnswer(opt, q.name);
+      grid.appendChild(btn);
+    });
+  }
+
+  /* ---- Handle answer selection ---- */
+  function handleAnswer(selected, correct) {
+    const buttons = document.querySelectorAll(".option-btn");
+    const isCorrect = selected === correct;
+
+    if (isCorrect) score += 10;
+
+    /* Disable all buttons and highlight results */
+    buttons.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correct) {
+        btn.classList.add(isCorrect ? "correct" : "reveal");
+      } else if (btn.textContent === selected && !isCorrect) {
+        btn.classList.add("wrong");
+      }
+    });
+
+    /* Show feedback */
+    const feedback = document.getElementById("feedback-bar");
+    feedback.textContent = isCorrect
+      ? `Correct! +10 points`
+      : `Not quite — that's ${correct}.`;
+    feedback.className = `feedback-bar show ${isCorrect ? "correct-fb" : "wrong-fb"}`;
+
+    /* Update score display */
+    document.getElementById("score-label").textContent = `Score: ${score}`;
+
+    /* Advance after short delay */
+    setTimeout(() => {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        renderQuestion();
+      } else {
+        showEnd();
+      }
+    }, 1600);
+  }
+
+  /* ---- End screen ---- */
+  function showEnd() {
+    document.getElementById("final-score").textContent = score;
+    document.getElementById("result-message").textContent = resultMessage(score);
+    document.getElementById("end-heading").textContent =
+      score === 60 ? "Summit Reached." : "Here's How You Did";
+
+    /* Fill progress bar to 100% before switching */
+    document.getElementById("progress-fill").style.width = "100%";
+    setTimeout(() => show("end-screen"), 300);
+  }
+</script>
+
+</body>
+</html>
